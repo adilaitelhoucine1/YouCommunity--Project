@@ -46,11 +46,11 @@
                                     <span class="text-sm text-gray-500">+42 participants</span>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('events.edit', $event->id) }}" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <button onclick="openEditModal({{ $event }})" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                                         </svg>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('events.delete', $event->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -75,4 +75,71 @@
             </div>
         </main>
     </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Modifier l'événement</h3>
+                <form id="editEventForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_title">
+                            Titre
+                        </label>
+                        <input type="text" id="edit_title" name="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_description">
+                            Description
+                        </label>
+                        <textarea id="edit_description" name="description" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_location">
+                            Lieu
+                        </label>
+                        <input type="text" id="edit_location" name="location" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_date">
+                            Date
+                        </label>
+                        <input type="datetime-local" id="edit_date" name="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal(event) {
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('edit_title').value = event.title;
+            document.getElementById('edit_description').value = event.description;
+            document.getElementById('edit_location').value = event.location;
+            document.getElementById('edit_date').value = event.date.slice(0, 16);
+            document.getElementById('editEventForm').action = `/events/${event.id}`;
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+    </script>
 </x-app-layout>

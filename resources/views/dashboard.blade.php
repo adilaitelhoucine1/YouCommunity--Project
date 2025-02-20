@@ -69,7 +69,8 @@
 
                 <!-- Upcoming Events Card -->
                 <div class="bg-white rounded-2xl shadow-sm border border-violet-100 p-6 hover:shadow-lg transition-all duration-300 group">
-                    <div class="flex items-center justify-between">
+                
+                <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">À Venir</p>
                             <div class="flex items-end space-x-1 mt-2">
@@ -163,58 +164,63 @@
                     </div>
                     <div class="p-6">
                         <div class="space-y-6">
-                            <!-- Event Item -->
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-pink-400 to-purple-400 flex flex-col items-center justify-center text-white">
-                                        <span class="text-sm font-bold">MAR</span>
-                                        <span class="text-xl font-bold">15</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900">Festival de Musique</p>
-                                    <p class="text-sm text-gray-500">Parc Central, 18:00</p>
-                                    <div class="flex items-center mt-1">
-                                        <div class="flex -space-x-2">
-                                            <div class="w-6 h-6 rounded-full bg-pink-400 border-2 border-white"></div>
-                                            <div class="w-6 h-6 rounded-full bg-purple-400 border-2 border-white"></div>
-                                            <div class="w-6 h-6 rounded-full bg-fuchsia-400 border-2 border-white"></div>
+                            @forelse ($events as $event)
+                                @if($event->status === 'A venir')
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-pink-400 to-purple-400 flex flex-col items-center justify-center text-white">
+                                                <span class="text-sm font-bold">{{ \Carbon\Carbon::parse($event->date)->format('M') }}</span>
+                                                <span class="text-xl font-bold">{{ \Carbon\Carbon::parse($event->date)->format('d') }}</span>
+                                            </div>
                                         </div>
-                                        <span class="text-xs text-gray-500 ml-2">+42 participants</span>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900">{{ $event->title }}</p>
+                                            <p class="text-sm text-gray-500">{{ $event->location }} - {{ $event->lieu }}</p>
+                                            <div class="flex items-center mt-1">
+                                                @if($event->max_participants)
+                                                    <span class="text-xs text-gray-500">Max: {{ $event->max_participants }} participants</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <button class="px-3 py-1 text-pink-600 border border-pink-200 rounded-lg hover:bg-pink-50">
+                                                Voir
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button class="px-3 py-1 text-pink-600 border border-pink-200 rounded-lg hover:bg-pink-50">
-                                        Voir
-                                    </button>
-                                </div>
-                            </div>
+                                @endif
+                            @empty
+                                <p class="text-gray-500 text-center">Aucun événement à venir</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- More Event Items -->
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-400 to-pink-400 flex flex-col items-center justify-center text-white">
-                                        <span class="text-sm font-bold">MAR</span>
-                                        <span class="text-xl font-bold">18</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900">Soirée Jazz</p>
-                                    <p class="text-sm text-gray-500">Le Club, 20:30</p>
-                                    <div class="flex items-center mt-1">
-                                        <div class="flex -space-x-2">
-                                            <div class="w-6 h-6 rounded-full bg-pink-400 border-2 border-white"></div>
-                                            <div class="w-6 h-6 rounded-full bg-purple-400 border-2 border-white"></div>
+                <!-- Past Events -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-800">Événements Passés</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            @forelse ($events as $event)
+                                @if($event->status === 'Passé')
+                                    <div class="flex items-center space-x-4 opacity-75">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-gray-400 to-gray-500 flex flex-col items-center justify-center text-white">
+                                                <span class="text-sm font-bold">{{ \Carbon\Carbon::parse($event->date)->format('M') }}</span>
+                                                <span class="text-xl font-bold">{{ \Carbon\Carbon::parse($event->date)->format('d') }}</span>
+                                            </div>
                                         </div>
-                                        <span class="text-xs text-gray-500 ml-2">+12 participants</span>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900">{{ $event->title }}</p>
+                                            <p class="text-sm text-gray-500">{{ $event->location }} - {{ $event->lieu }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button class="px-3 py-1 text-pink-600 border border-pink-200 rounded-lg hover:bg-pink-50">
-                                        Voir
-                                    </button>
-                                </div>
-                            </div>
+                                @endif
+                            @empty
+                                <p class="text-gray-500 text-center">Aucun événement passé</p>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -231,22 +237,32 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Titre</label>
-                        <input type="text" name="title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="text" name="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                        <textarea name="description" required rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Date</label>
-                        <input type="datetime-local" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="datetime-local" name="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
                     
                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" name="location" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-gray-700">Lieu</label>
-                        <input type="text" name="location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <input type="text" name="lieu" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre maximum de participants</label>
+                        <input type="number" name="max_participants" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
                     <div class="flex justify-end space-x-3 mt-6">

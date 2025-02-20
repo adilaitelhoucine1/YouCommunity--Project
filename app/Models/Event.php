@@ -12,13 +12,17 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
-        'date',
         'location',
+        'date',
         'user_id',
+        'lieu',
+        'max_participants',
+        'status'
     ];
 
     protected $casts = [
         'date' => 'datetime',
+        'max_participants' => 'integer',
     ];
 
     public function user()

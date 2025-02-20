@@ -16,6 +16,10 @@ return new class extends Migration
             $table->datetime('date');
             $table->string('location');
             $table->timestamps();
+            $table->string('lieu');
+            $table->integer('max_participants')->nullable();
+            $table->enum('status', ['A venir', 'Passé'])->default('A venir');
+           
         });
     }
 
