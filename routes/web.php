@@ -34,6 +34,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::patch('/events/{event}/changeStatus', [UserController::class, 'changeStatus'])
         ->name('events.change-status');
+
+    Route::get('/events/{event}/ShowDetails', [UserController::class, 'ShowDetailsView'])
+        ->name('events.showDetails');
 });
 
 require __DIR__.'/auth.php';

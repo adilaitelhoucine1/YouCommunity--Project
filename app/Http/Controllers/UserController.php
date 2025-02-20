@@ -45,9 +45,7 @@ class UserController extends Controller
 
     public function destroy(Event $event)
     {
-        if ($event->user_id !== auth()->id()) {
-            return redirect()->back();
-        }
+      
 
         $event->delete();
         return redirect()->route('events.myevents');
@@ -75,7 +73,7 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        $events = Event::where('user_id', auth()->id())
+        $events = Event::select('*')
             ->orderBy('date', 'asc')
             ->get();
 
@@ -96,5 +94,11 @@ class UserController extends Controller
         
         $event->save();
         return redirect()->route('events.myevents');
+    }
+
+    public function ShowDetailsView($id){
+        $event=Event::find($id);
+
+       return  view('EventDetails',["event"=>$event]);
     }
 } 

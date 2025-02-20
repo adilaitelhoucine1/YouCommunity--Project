@@ -183,9 +183,11 @@
                                             </div>
                                         </div>
                                         <div class="flex-shrink-0">
-                                            <button class="px-3 py-1 text-pink-600 border border-pink-200 rounded-lg hover:bg-pink-50">
+                                           <a href="{{ route('events.showDetails', $event->id) }}" class="px-3 py-1 text-pink-600 border border-pink-200 rounded-lg hover:bg-pink-50">
                                                 Voir
-                                            </button>
+                                            </a>
+
+
                                         </div>
                                     </div>
                                 @endif
