@@ -31,6 +31,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/events/{event}', [UserController::class, 'update'])->name('events.update');
    
     Route::delete('/events/{event}', [UserController::class, 'destroy'])->name('events.delete');
+
+    Route::patch('/events/{event}/changeStatus', [UserController::class, 'changeStatus'])
+        ->name('events.change-status');
 });
 
 require __DIR__.'/auth.php';

@@ -19,7 +19,7 @@
                                  alt="Event" 
                                  class="w-full h-48 object-cover rounded-t-lg">
                             <div class="absolute top-4 right-4">
-                                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs">Actif</span>
+                                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-l">{{$event->status}}</span>
                             </div>
                         </div>
                         <div class="p-6">
@@ -51,6 +51,18 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                                         </svg>
                                     </button>
+                                    
+                                    <!-- Status Toggle Button -->
+                                    <form action="{{ route('events.change-status', $event->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="p-2 {{ $event->status === 'A venir' ? 'text-green-500 hover:bg-green-50' : 'text-gray-500 hover:bg-gray-50' }} rounded-lg transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+
                                     <form action="{{ route('events.delete', $event->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')

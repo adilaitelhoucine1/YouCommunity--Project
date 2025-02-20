@@ -46,11 +46,11 @@ class UserController extends Controller
     public function destroy(Event $event)
     {
         if ($event->user_id !== auth()->id()) {
-            return redirect()->back()->with('error', 'Vous n\'êtes pas autorisé à supprimer cet événement.');
+            return redirect()->back();
         }
 
         $event->delete();
-        return redirect()->route('events.myevents')->with('success', 'Événement supprimé avec succès');
+        return redirect()->route('events.myevents');
     }
 
     public function update(Request $request, Event $event)
@@ -68,15 +68,9 @@ class UserController extends Controller
             'max_participants' => 'nullable|integer|min:1',
         ]);
 
-        // Update status based on date
-        if ($validated['date'] < now()) {
-            $validated['status'] = 'Passé';
-        }
-
         $event->update($validated);
 
-        return redirect()->route('events.myevents')
-            ->with('success', 'Événement mis à jour avec succès');
+        return redirect()->route('events.myevents');
     }
 
     public function dashboard()
@@ -88,5 +82,19 @@ class UserController extends Controller
         return view('dashboard', [
             'events' => $events
         ]);
+    }
+
+    public function changeStatus($id)
+    {
+        $event = Event::find($id);
+        
+        if($event->status === 'A venir') {
+            $event->status = 'Passé';
+        } else {
+            $event->status = 'A venir';
+        }
+        
+        $event->save();
+        return redirect()->route('events.myevents');
     }
 } 
