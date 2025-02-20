@@ -101,4 +101,10 @@ class UserController extends Controller
 
        return  view('EventDetails',["event"=>$event]);
     }
+
+    public function showDetails($id)
+    {
+        $event = Event::find($id);
+        return view('EventDetails', ['event' => $event]);
+    }
 } 

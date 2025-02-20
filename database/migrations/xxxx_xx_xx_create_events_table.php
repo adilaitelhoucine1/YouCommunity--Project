@@ -9,17 +9,22 @@ return new class extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->id('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('description');
-            $table->datetime('date');
+            $table->dateTime('date');
             $table->string('location');
-            $table->timestamps();
             $table->string('lieu');
             $table->integer('max_participants')->nullable();
+            $table->string('photo')->nullable();
             $table->enum('status', ['A venir', 'Passé'])->default('A venir');
-           
+            $table->timestamps();
+
+            $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
         });
     }
 
