@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -43,7 +44,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function     (Event $event)
+    public function destroy(Event $event)
     {
       
 
@@ -53,9 +54,7 @@ class UserController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        if ($event->user_id !== auth()->id()) {
-            return redirect()->back()->with('error', 'Vous n\'êtes pas autorisé à modifier cet événement.');
-        }
+       
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -104,7 +103,34 @@ class UserController extends Controller
 
     public function showDetails($id)
     {
-        $event = Event::find($id);
-        return view('EventDetails', ['event' => $event]);
+        $event = Event::with(['comments.user'])->find($id);
+        
+        return view('EventDetails', [
+            'event' => $event,
+            'comments' => $event->comments()->get()
+        ]);
+    }
+     
+    public function AddComment(Request $request)
+    {
+        $validated = $request->validate([
+            'comment' => 'required|string',
+            'event_id' => 'required|exists:events,id'
+        ]);
+
+        Comment::create([
+            'contenu' => $validated['comment'],
+            'event_id' => $validated['event_id'],
+            'user_id' => auth()->id()
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function deleteComment(Comment $comment)
+    {
+       // dd($comment);
+        $comment->delete();
+        return redirect()->back();
     }
 } 

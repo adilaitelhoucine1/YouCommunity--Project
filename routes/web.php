@@ -36,6 +36,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/events/{event}/ShowDetails', [UserController::class, 'showDetails'])
         ->name('events.showDetails');
+
+    Route::post('/addcomment', [UserController::class, 'AddComment'])
+        ->name('comment.add');
+
+    Route::delete('/comments/{comment}', [UserController::class, 'deleteComment'])
+        ->name('comment.delete');
 });
 
 require __DIR__.'/auth.php';
