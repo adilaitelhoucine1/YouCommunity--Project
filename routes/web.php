@@ -27,7 +27,6 @@ Route::middleware(['auth'])->group(function () {
   
     Route::post('/addevent', [UserController::class, 'AddEvent'])->name('events.add');
     
-   
     Route::put('/events/{event}', [UserController::class, 'update'])->name('events.update');
    
     Route::delete('/events/{event}', [UserController::class, 'destroy'])->name('events.delete');

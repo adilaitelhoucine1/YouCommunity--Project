@@ -43,7 +43,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function destroy(Event $event)
+    public function     (Event $event)
     {
       
 
