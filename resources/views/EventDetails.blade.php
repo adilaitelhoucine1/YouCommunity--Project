@@ -78,8 +78,9 @@
                     <!-- Action Buttons -->
                     <div class="flex justify-end space-x-4 pt-6 border-t">
                         <!-- Bouton Réserver -->
-                        <form action="" method="POST">
+                        <form action="{{ route('events.AddReservation') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="event_id" value="{{ $event->id }}">
                             <button type="submit" 
                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                                 <div class="flex items-center space-x-2">
@@ -100,6 +101,25 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Messages Flash -->
+            @if(session('success'))
+                <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg" 
+                     x-data="{ show: true }" 
+                     x-show="show" 
+                     x-init="setTimeout(() => show = false, 3000)">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg"
+                     x-data="{ show: true }" 
+                     x-show="show" 
+                     x-init="setTimeout(() => show = false, 3000)">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <!-- Comments Section -->
             <div class="mt-8 bg-white rounded-lg shadow-sm">
@@ -168,24 +188,7 @@
                 </div>
             </div>
 
-            <!-- Flash Messages -->
-            @if(session('success'))
-                <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg" 
-                     x-data="{ show: true }" 
-                     x-show="show" 
-                     x-init="setTimeout(() => show = false, 3000)">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg"
-                     x-data="{ show: true }" 
-                     x-show="show" 
-                     x-init="setTimeout(() => show = false, 3000)">
-                    {{ session('error') }}
-                </div>
-            @endif
+           
         </main>
     </div>
 </x-app-layout>

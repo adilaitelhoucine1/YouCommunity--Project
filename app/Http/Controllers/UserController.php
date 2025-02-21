@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Comment;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -132,5 +133,56 @@ class UserController extends Controller
        // dd($comment);
         $comment->delete();
         return redirect()->back();
+    }
+
+    public function AddReservation(Request $request)
+    {
+        $event_id = $request->input('event_id');
+        $event = Event::findOrFail($event_id);
+        
+        
+        if ($event->max_participants) {
+            $current_reservations = $event->reservations()->where('status', 'confirmé')->count();
+            if ($current_reservations >= $event->max_participants) {
+                return redirect()->back()->with('error', 'Désolé, cet événement est complet.');
+            }
+        }
+        
+        
+        $existing_reservation = Reservation::where('user_id', auth()->id())
+            ->where('event_id', $event_id)
+            ->first();
+            
+        if ($existing_reservation) {
+            return redirect()->back()->with('error', 'Vous avez déjà réservé pour cet événement.');
+        }
+      
+        Reservation::create([
+            'user_id' => auth()->id(),
+            'event_id' => $event_id,
+            'status' => 'confirmé'
+        ]);
+        
+        return redirect()->back()->with('success', 'Votre réservation a été enregistrée avec succès !');
+    }
+
+    public function showReservations()
+    {
+        $reservations = Reservation::where('user_id', auth()->id())
+            ->with('event')  // Eager load les relations
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('Reservation', ['reservations' => $reservations]);
+    }
+
+    public function cancelReservation(Reservation $reservation)
+    {
+        if ($reservation->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Non autorisé');
+        }
+
+        $reservation->delete();
+        return redirect()->back()->with('success', 'Réservation Supprimée avec succès');
     }
 } 

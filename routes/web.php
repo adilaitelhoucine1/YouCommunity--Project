@@ -42,6 +42,17 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/comments/{comment}', [UserController::class, 'deleteComment'])
         ->name('comment.delete');
+
+    Route::post('/events/AddReservation', [UserController::class, 'AddReservation'])
+        ->name('events.AddReservation');
+
+   
+    Route::get('/reservations', [UserController::class, 'showReservations'])
+        ->name('reservations.index');
+
+  
+    Route::delete('/reservations/{reservation}/cancel', [UserController::class, 'cancelReservation'])
+        ->name('reservation.cancel');
 });
 
 require __DIR__.'/auth.php';
